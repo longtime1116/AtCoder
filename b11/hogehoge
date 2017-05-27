@@ -1,0 +1,4 @@
+17c17
+< const int MAX_N = 1000;
+---
+> const int MAX_N = 100;
