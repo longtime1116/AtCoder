@@ -50,7 +50,7 @@ int main() {
 
     int ans = 1;
     for (int i=0; i<x; i++) {
-        ans = (ans * 2) % 1000000009;
+        ans = (ans * 2) % 1000000007;
     }
 
     cout << ans << endl;
