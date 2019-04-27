@@ -5,16 +5,19 @@ using namespace std;
 typedef long long int lli;
 typedef pair<int, int> P;
 
-int gcds[100000];
-int A[10000];
-int tmp[10000];
+int A[100000];
+int R[100000];
+int L[100000];
 int n;
 
 int gcd(int a, int b) {
     if (a < b)
         swap(a, b);
+    if (b == 0)
+        return a;
     int r;
       r = a % b;
+
   while(r!=0){
     a = b;
     b = r;
@@ -23,45 +26,28 @@ int gcd(int a, int b) {
   return b;
 }
 
-void do_gcd(int step, bool first) {
-    for (int i =0; i < n; i += step) {
-        int next_i = i+step/2;
-        if (next_i > n-1)
-            continue;
-        tmp[i] = gcd(tmp[i], tmp[next_i]);
-    }
+int calc_l(int max_i) {
+    if (max_i < 0)
+        return 0;
+    if (L[max_i] != 0)
+        return L[max_i];
+    if (max_i == 0)
+        return L[0] = A[0];
+    return L[max_i] = gcd(calc_l(max_i-1), A[max_i]);
+}
 
+int calc_r(int min_i) {
+    if (min_i > n-1)
+        return 0;
+    if (R[min_i] != 0)
+        return R[min_i];
+    if (min_i == n-1)
+        return R[n-1] = A[n-1];
+    return R[min_i] = gcd(calc_r(min_i+1), A[min_i]);
 }
 
 int exclude_gcd(int ex_i) {
-    int step = 2;
-    bool first = true;
-
-    // tmp 初期化
-    REP(i, n) {
-        tmp[i] = A[i];
-    }
-    int alt = ex_i - 1;
-    if (ex_i == 0)
-        alt = 1;
-
-    tmp[ex_i] = tmp[alt];
-    while(true) {
-        //cout << "step: " << step << endl;
-        do_gcd(step, first);
-        first = false;
-
-        //cout << "[";
-        //for (int i = 0; i < n; i++)
-            //cout << tmp[i] << ",";
-        //cout << "]" << endl;
-
-        step *= 2;
-        if (step/2>n)
-            break;
-    }
-
-    return tmp[0];
+    return gcd(calc_l(ex_i-1), calc_r(ex_i+1));
 }
 
 int main() {
@@ -70,12 +56,10 @@ int main() {
         cin >> A[i];
     }
     int max_gcd = 0;
+
     // i を除いたときのgcd
     REP(i, n) {
-        //cout << "---------" << endl;
         int cur_gcd = exclude_gcd(i);
-        //cout << "cur : ";
-        //cout << cur_gcd << endl;
         max_gcd = max(max_gcd, cur_gcd);
     }
     cout << max_gcd << endl;
