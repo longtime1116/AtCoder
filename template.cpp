@@ -6,8 +6,7 @@ typedef long long int lli;
 typedef pair<int, int> P;
 
 int main() {
-    int a;
-    lli hoge;
-    cin >> a;
+    int n;
+    cin >> n;
     cout << a << endl;
 }
