@@ -1,1 +1,1 @@
-git ls-files --others --exclude-standard | grep "abc*" | xargs rm
+git ls-files --others --exclude-standard | egrep "abc|arc" | xargs rm
