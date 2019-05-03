@@ -19,7 +19,7 @@ int main() {
     REP(i, n) {
         cin >> a[i+1];
         total += a[i+1];
-        dp[i][i+1] = LLONG_MAX;
+        dp[i][i+1] = 2000*500000+1;
     }
     dp[1][1] = 1;
     if (total == k) {
@@ -34,7 +34,12 @@ int main() {
             if (i < j)
                 break;
             lli w = dp[i-1][j-1] * a[i] / done_game_count + 1;
-            dp[i][j] = min(dp[i-1][j], dp[i-1][j-1] + w);
+            // Q: なぜ w > a[i] のケースでも dp[i-1][j-1] + w を採用すべきなのだろうか
+            // 解答が間違っているということはないのだろうか・・・
+            if (w > a[i])
+                dp[i][j] = dp[i-1][j];
+            else
+                dp[i][j] = min(dp[i-1][j], dp[i-1][j-1] + w);
         }
         done_game_count += a[i];
     }
