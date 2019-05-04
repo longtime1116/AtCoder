@@ -31,3 +31,7 @@ $ln -s /usr/local/bin/g++-5 /usr/local/bin/g++
   * ABC032 D
 * 最長増加部分列
   * ABC006 D
+* combination の計算(パスカルの三角形)
+  * ABC110 D
+* 素因数分解の取得
+  * ABC110 D
