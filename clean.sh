@@ -1,1 +1,1 @@
-git ls-files --others --exclude-standard | egrep "abc|arc" | xargs rm
+git ls-files --others --exclude-standard | egrep "abc|arc|agc|tdpc" | xargs rm
