@@ -9,6 +9,7 @@ typedef pair<int, int> P;
 // dp[i][j][k]
 // 左から i 桁(1<=i<=n.length)までの和を D で割った余がj になる個数
 // ただし、N よりも大きいとダメなので、Nよりも大きい可能性があるケースは別で処理する
+// k が 1 ならば、0〜9までの値を安心して取っている、k が 0 ならば、それは最大値を取る可能性がある
 lli dp[10002][100][2];
 lli mod = 1000000007;
 int main() {
@@ -22,10 +23,11 @@ int main() {
         for (int j=0; j < d; j++) {
             int num = static_cast<int>(n[i-1] - '0');
             // danger
+            dp[i][(j+num)%d][!safe] = (dp[i][(j+num)%d][!safe] + dp[i-1][j][!safe]) % mod;
+            // 最上位がn[i-1]と一致していなければ、それ以降の文字は何でもOKなのでsafe
             for (int k=0; k < num; k++) {
                 dp[i][(j+k)%d][safe] = (dp[i][(j+k)%d][safe] + dp[i-1][j][!safe]) % mod;
             }
-            dp[i][(j+num)%d][!safe] = (dp[i][(j+num)%d][!safe] + dp[i-1][j][!safe]) % mod;
 
             // safe
             for (int k=0; k < 10; k++) {
