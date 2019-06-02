@@ -12,4 +12,6 @@ typedef long long int lli;
 typedef pair<lli, lli> P;
 
 int main() {
+    lli n;
+    cin >> n;
 }
