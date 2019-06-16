@@ -11,8 +11,6 @@ using namespace std;
 typedef long long int lli;
 typedef pair<lli, lli> P;
 
-bool is_done[51];
-
 lli gcd(lli a, lli b) {
     if (a < b)
         swap(a, b);
@@ -48,10 +46,7 @@ int main() {
     //}
     lli ans = LLONG_MAX;
     REP(i, 0, n) {
-        REP(j, 0, n) {
-            if (i == j)
-                continue;
-
+        REP(j, i+1, n) {
             // この(p, q)の組み合わせでのコストを出す。
             lli p = xy[j].first - xy[i].first;
             lli q = xy[j].second - xy[i].second;
@@ -64,28 +59,30 @@ int main() {
 
             // 一個取り出す => それに (p, q) を足してあったら消す、みたいにやっていく
             lli cur_cost = 0;
-            REP(i, 0, n) {
-                lli x = xy[i].first;
-                lli y = xy[i].second;
-                P orig = P(x, y);
-                if (s.find(orig) == s.end()) {
-                    continue;
-                }
-                s.erase(orig);
-                cur_cost++;
-                while (true) {
+            lli x = xy[i].first;
+            lli y = xy[i].second;
+            bool is_first = true;
+            while(true) {
+                if (s.empty())
+                    break;
+                P target = P(x, y);
+                if (s.find(target) != s.end()) {
+                    s.erase(target);
+                    if (is_first) {
+                        cur_cost++;
+                        is_first = !is_first;
+                    }
                     x += p;
                     y += q;
-                    P target = P(x, y);
-
-                    if (s.find(target) == s.end()) {
-                        break;
-                    }
-
-                    s.erase(target);
                 }
-            }
+                else {
+                    is_first = true;
+                    auto it = s.begin();
+                    x = it->first;
+                    y = it->second;
+                }
 
+            }
             ans = min(ans, cur_cost);
         }
     }
