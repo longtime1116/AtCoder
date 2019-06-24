@@ -40,3 +40,5 @@ $ln -s /usr/local/bin/g++-5 /usr/local/bin/g++
   * ABC110 D
 * 素因数分解の取得
   * ABC110 D
+* しゃくとり
+  * ABC130 D

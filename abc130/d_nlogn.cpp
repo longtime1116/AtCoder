@@ -1,4 +1,3 @@
-
 #include <bits/stdc++.h>
 using namespace std;
 
@@ -17,24 +16,25 @@ int main() {
     cin >> n >> k;
     lli a[n];
     REP(i, 0, n) {
-        cin >> a[i];
+        lli x;
+        cin >> x;
+        a[i] = x;
     }
+    lli ary[n];
+    ary[0] = a[0];
+    REP(i, 1, n) {
+        ary[i] = ary[i-1] + a[i];
+    }
+
     lli ans = 0;
-    lli sum = 0;
-    lli r = 0;
+    lli cur_k = k;
     REP(i, 0, n) {
-        while (r < n) {
-            if (sum >= k)
-                break;
-            sum += a[r];
-            r++;
-        }
-        if (sum < k)
-            break;
-        ans += n - r + 1;
-        sum -= a[i];
+        if (i != 0)
+            cur_k = cur_k + a[i-1];
+        // cur_k以上のやつの数を足す
+        auto it = lower_bound(ary, ary+n, cur_k);
+        ans +=  ary+n - it;
     }
     cout << ans << endl;
-
 }
 
