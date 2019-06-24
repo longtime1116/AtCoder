@@ -11,22 +11,6 @@ using namespace std;
 typedef long long int lli;
 typedef pair<lli, lli> P;
 
-lli gcd(lli a, lli b) {
-    if (a < b)
-        swap(a, b);
-    if (b == 0)
-        return a;
-    lli r;
-      r = a % b;
-
-  while(r!=0){
-    a = b;
-    b = r;
-    r = a % b;
-  }
-  return b;
-}
-
 int main() {
     lli n;
     cin >> n;
@@ -34,57 +18,30 @@ int main() {
         cout << 1 << endl;
         return 0;
     }
-    vector<P> xy;
+    lli x[n];
+    lli y[n];
     REP(i, 0, n) {
         lli xi, yi;
         cin >> xi >> yi;
-        xy.push_back(P(xi, yi));
+        x[i] = xi;
+        y[i] = yi;
     }
-    sort(xy.begin(), xy.end());
-    //REP(i, 0, xy.size()) {
-    //    cout << "x: " << xy[i].first << ", y: " << xy[i].second << endl;
-    //}
-    lli ans = LLONG_MAX;
+    map<P, lli> m;
     REP(i, 0, n) {
-        REP(j, i+1, n) {
+        REP(j, 0, n) {
+            if (i == j)
+                continue;
             // この(p, q)の組み合わせでのコストを出す。
-            lli p = xy[j].first - xy[i].first;
-            lli q = xy[j].second - xy[i].second;
+            lli p = x[j] - x[i];
+            lli q = y[j] - y[i];
 
-            // 集合を作る
-            set<P> s;
-            REP(i, 0, n) {
-                s.insert(P(xy[i].first, xy[i].second));
-            }
-
-            // 一個取り出す => それに (p, q) を足してあったら消す、みたいにやっていく
-            lli cur_cost = 0;
-            lli x = xy[i].first;
-            lli y = xy[i].second;
-            bool is_first = true;
-            while(true) {
-                if (s.empty())
-                    break;
-                P target = P(x, y);
-                if (s.find(target) != s.end()) {
-                    s.erase(target);
-                    if (is_first) {
-                        cur_cost++;
-                        is_first = !is_first;
-                    }
-                    x += p;
-                    y += q;
-                }
-                else {
-                    is_first = true;
-                    auto it = s.begin();
-                    x = it->first;
-                    y = it->second;
-                }
-
-            }
-            ans = min(ans, cur_cost);
+            m[P(p, q)]++;
         }
     }
-    cout << ans << endl;
+
+    lli ans = 0;
+    REPIT(it, m) {
+        ans = max(ans, it->second);
+    }
+    cout << n - ans << endl;
 }
