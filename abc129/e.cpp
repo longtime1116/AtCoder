@@ -21,23 +21,30 @@ int main() {
     bool safe = true;
     dp[0][safe] = 0;
     dp[0][!safe] = 1;
-    REP(i, 0, l.length()) {
+    lli len = l.length()-1;
+    REP(i, 0, len) {
         // danger
         if (l[i+1] == '0') {
-            dp[i+1][safe] += dp[i][!safe] * 2;
+            // 0 のときは、今回の桁は (0, 0) しかありえない
+            // なぜなら、少なくともひとつが 1 ならば、L を超えてしまうから
+            dp[i+1][!safe] = dp[i][!safe];
         }
         else {
-            // '1' なので、3通りありえる
-            dp[i+1][safe] += dp[i][!safe] * 3;
+            // 1 のときは、今回の桁は (0, 0), (1, 0), (0, 1) の可能性がある
+            // (0, 0) のときのみ、その次以降は safe となる
+            dp[i+1][!safe] = (dp[i][!safe] * 2) % mod;
+            dp[i+1][safe] = dp[i][!safe];
         }
 
         // safe
-        dp[i+1][safe] += dp[i][safe] * 3;
+        // (0, 0), (0, 1), (1, 0) のどれかを取れる
+        dp[i+1][safe] = (dp[i+1][safe] + (dp[i][safe] * 3) % mod) % mod;
 
     }
-    REPE(i, 1, l.length()) {
-        cout << "dp[" << i << "][dang]: " << dp[i][!safe] << ", ";
-        cout << "dp[" << i << "][safe]: " << dp[i][safe];
-        cout << endl;
-    }
+    //REPE(i, 1, len) {
+    //    cout << "dp[" << i << "][!safe]: " << dp[i][!safe] << ", ";
+    //    cout << "dp[" << i << "][safe]: " << dp[i][safe];
+    //    cout << endl;
+    //}
+    cout << (dp[len][0] + dp[len][1]) % mod << endl;
 }
