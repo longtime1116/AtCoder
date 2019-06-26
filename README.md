@@ -34,6 +34,9 @@ $ln -s /usr/local/bin/g++-5 /usr/local/bin/g++
 * 01ナップザック問題
   * ABC032 D
   * ABC015 D
+* 桁DP
+  * tdpc E
+  * ABC129 E
 * 最長増加部分列
   * ABC006 D
 * combination の計算(パスカルの三角形)
