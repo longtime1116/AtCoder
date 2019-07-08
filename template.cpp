@@ -22,5 +22,5 @@ typedef pair<lli, lli> P;
 
 int main() {
     lli n;
-    cin >> n;
+    cin1(n);
 }
