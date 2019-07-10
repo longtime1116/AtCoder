@@ -20,7 +20,7 @@ using namespace std;
 typedef long long int lli;
 typedef pair<lli, lli> P;
 
-lli dp[101][101][401]; // dp[i][j][k]: i 個目まで使える状態で、j 個使って重さ k を満たす最大の価値
+lli dp[101][101][301]; // dp[i][j][k]: i 個目まで使える状態で、j 個使って重さ k を満たす最大の価値
 
 int main() {
     lli n, W;
@@ -29,38 +29,31 @@ int main() {
     REP(i, 0, n) {
         cin >> w[i] >> v[i];
     }
-    lli w_diff = w[0] - 1;
+    lli w0 = w[0];
     REP(i, 0, n) {
-        w[i] -= w_diff;
+        w[i] -= w0;
     }
-    //cout << "hoge" << endl;
 
-    lli ans = 0;
-    REPE(use_count, 1, n) {
-        lli cur_w = W - w_diff*use_count;
-        if (cur_w < 0)
-            break;
-        REPE(i, 1, n) {
-            REPE(j, 1, use_count) {
-                REPE(k, 0, 400) {
-                    if (k-w[i-1] < 0) {
-                        dp[i][j][k] = dp[i-1][j][k];
-                    }
-                    else {
-                        dp[i][j][k] = max(dp[i-1][j][k], dp[i-1][j-1][k-w[i-1]] + v[i-1]);
-                    }
-                    //cout << "dp[" << i << "][" << j << "][" << k << "]: " << dp[i][j][k]  << endl;
+    REPE(i, 1, n) {
+        REPE(j, 1, i) {
+            REPE(k, 0, 3*n) {
+                if (k-w[i-1] < 0) {
+                    dp[i][j][k] = dp[i-1][j][k];
                 }
+                else {
+                    dp[i][j][k] = max(dp[i-1][j][k], dp[i-1][j-1][k-w[i-1]] + v[i-1]);
+                }
+                //cout << "dp[" << i << "][" << j << "][" << k << "]: " << dp[i][j][k]  << endl;
             }
         }
-        // 評価 & 初期化
-        REPE(i, 0, n) {
-            REPE(j, 0, n) {
-                REPE(k, 0, min((lli)400, cur_w)) {
-                    ans = max(ans, dp[i][j][k]);
-                    dp[i][j][k] = 0;
-                }
-            }
+    }
+    lli ans = 0;
+    REPE(j, 1, n) {
+        REPE(k, 0, 3*n) {
+            if (j*w0 + k > W)
+                continue;
+            //cout << "dp[" << n << "][" << j << "][" << k << "]: " << dp[n][j][k]  << endl;
+            ans = max(ans, dp[n][j][k]);
         }
     }
 
