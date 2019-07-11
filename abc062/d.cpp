@@ -41,12 +41,16 @@ int main() {
             lli l = l_que.top();
             lli r = r_que.top();
             if (a[l_target] - l > r - a[l_target]) {
-                l_que.pop();
-                l_que.push(a[l_target]);
+                if (l < a[l_target]) {
+                    l_que.pop();
+                    l_que.push(a[l_target]);
+                }
             }
             else {
-                r_que.pop();
-                r_que.push(a[r_target]);
+                if (r > a[r_target]) {
+                    r_que.pop();
+                    r_que.push(a[r_target]);
+                }
             }
         }
         else {
