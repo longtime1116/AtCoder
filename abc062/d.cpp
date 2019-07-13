@@ -26,60 +26,39 @@ int main() {
     lli a[n*3];
     ncin1(n*3, a);
 
+
+    lli l_que_total = 0;
+    lli r_que_total = 0;
     priority_queue<lli, vector<lli>, greater<lli>> l_que;
     priority_queue<lli> r_que;
     REP(i, 0, n) {
         l_que.push(a[i]);
+        l_que_total += a[i];
         r_que.push(a[n*3-1-i]);
+        r_que_total += a[n*3-1-i];
     }
 
-    lli l_target = n;
-    lli r_target = n*2-1;
-    REP(i, 0, (n+1)/2) {
-        if (l_target == r_target) {
-            // n が奇数でかつ最後のループの時のみここに入る
-            lli l = l_que.top();
-            lli r = r_que.top();
-            if (a[l_target] - l > r - a[l_target]) {
-                if (l < a[l_target]) {
-                    l_que.pop();
-                    l_que.push(a[l_target]);
-                }
-            }
-            else {
-                if (r > a[r_target]) {
-                    r_que.pop();
-                    r_que.push(a[r_target]);
-                }
-            }
-        }
-        else {
-            // l_que から取り出したやつと、a[l_index] を比べて、入れ替え
-            lli l = l_que.top();
-            if (l < a[l_target]) {
-                l_que.pop();
-                l_que.push(a[l_target]);
-                //cout << "l_que pushed: " << a[l_target] << endl;
-            }
-            l_target++;
-            // r_que から取り出したやつと、a[r_index] を比べて、入れ替え
-            lli r = r_que.top();
-            if (r > a[r_target]) {
-                r_que.pop();
-                r_que.push(a[r_target]);
-                //cout << "r_que pushed: " << a[r_target] << endl;
-            }
-            r_target--;
-        }
-    }
-    // l_que から全部取り出して足したやつ - r_que から全部取り出して足したやつ
-    lli ans = 0;
-    while (!l_que.empty()) {
-        ans = ans +  l_que.top() - r_que.top();
-        //cout << "l_que poped: " << l_que.top() << endl;
-        //cout << "r_que poped: " << r_que.top() << endl;
+    lli l_que_totals[3*n];
+    lli r_que_totals[3*n];
+    l_que_totals[n-1] = l_que_total;
+    r_que_totals[2*n] = r_que_total;
+    REP(i, n, n*2) {
+        l_que_total += a[i];
+        l_que.push(a[i]);
+        l_que_total -= l_que.top();
         l_que.pop();
+        l_que_totals[i] = l_que_total;
+    }
+    for (lli i = 2*n-1; i >=n; i--) {
+        r_que_total += a[i];
+        r_que.push(a[i]);
+        r_que_total -= r_que.top();
         r_que.pop();
+        r_que_totals[i] = r_que_total;
+    }
+    lli ans = -LLONG_MAX;
+    REPE(i, n-1, n*2-1) {
+        ans = max(ans, l_que_totals[i] - r_que_totals[i+1]);
     }
     cout << ans << endl;
 }
