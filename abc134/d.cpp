@@ -29,47 +29,45 @@ typedef pair<lli, lli> P;
 
 
 lli t[200001];
-lli status[200001];
 
 int main() {
     lli n;
     cin1(n);
-    lli a[n];
+    lli a[n+1];
     REPE(i, 1, n) {
         cin >> a[i];
     }
-    // 素因数 key が value 個ある、を表す map
 
+    for (lli i = n; i >= 1; i--) {
 
-    for (lli i = n; i >=1; i--) {
-        if (a[n] == 0) {
-
+        lli x = i / n;
+        lli count = 0;
+        for (lli j = i+i; j <= n; j += i) {
+            count += t[j];
         }
-        map<lli, lli> fac;
-        lli num = i;
-        for(lli i = 2; i*i<=num; i++) {
-            while (num % i == 0) {
-                fac[i]++;
-                num /= i;
-                t[i*fac[i]]++;
-            }
+        if (a[i] == 1) {
+            if (count % 2 == 0)
+                t[i] = 1;
         }
-        if (num != 1) {
-            fac[num] = 1;
-            t[num] = 0;
+        else {
+            if (count % 2 == 1)
+                t[i] = 1;
         }
     }
-    lli num = 0;
+    lli ans = 0;
     REPE(i, 1, n) {
-        if (t[i] == 1)
-            num++;
+        if (t[i] > 0)
+            ans++;
     }
-    cout << num << endl;
-    if (num == 0)
+    cout << ans << endl;
+    if (ans == 0)
         return 0;
+
     REPE(i, 1, n) {
-        if (t[i] == 1)
+        if (t[i] > 0)
             cout << i << " ";
     }
     cout << endl;
 }
+
+
