@@ -30,37 +30,12 @@ typedef pair<lli, lli> P;
 lli dp[301][301]; // k 個分用意しなくても上書きしてけば良いので、dp[i][j]のみ用意
 #define INF (LLONG_MAX / 3);
 
-bool used[9];
-lli r[9];
-lli N, M, R;
-
-lli rec(lli cur, lli used_count) {
-    if (used_count == R) {
-        return 0;
-    }
-
-    // r[i] が未使用ならそれを使う
-    lli ans = LLONG_MAX;
-    REPE(i, 1, R) {
-        lli target = r[i];
-        if (target == cur || used[target])
-            continue;
-
-        used[cur] = true;
-        ans = min(ans, rec(target, used_count+1) +dp[cur][target]);
-        //cout1(target);
-        //cout1(used_count);
-        //cout1(ans);
-        used[cur] = false;
-    }
-    return ans;
-}
 
 int main() {
+    lli N, M, R;
     cin3(N, M, R);
-    REPE(i, 1, R) {
-        cin >> r[i];
-    }
+    lli r[8];
+    ncin1(R, r);
     REP(i, 0, M) {
         lli from, to, cost;
         cin >> from >> to >> cost;
@@ -86,11 +61,15 @@ int main() {
         }
     }
     lli ans = LLONG_MAX;
-    REPE(i, 1, R) {
-        used[r[i]] = true;
-        ans = min(ans, rec(r[i], 1));
-        used[r[i]] = false;
-    }
+    sort(r, r+R);
+    do {
+        lli total = 0;
+        REP(i, 0, R-1) {
+            total += dp[r[i]][r[i+1]];
+        }
+        ans = min(ans, total);
+
+    } while (next_permutation(r, r+R));
     cout << ans << endl;
     // dump
     //cout << endl;
@@ -100,9 +79,6 @@ int main() {
     //    }
     //    cout << endl;
     //}
-
-    // Rの順番を全て舐める
-
 }
 
 
