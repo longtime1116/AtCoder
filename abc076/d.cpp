@@ -31,51 +31,43 @@ int main() {
     lli n;
     cin1(n);
     lli t[n+2], v[n+2];
+    double total = 0;
     REPE(i, 1, n) {
         cin >> t[i];
+        total += t[i];
+    }
+    lli total_t[n+1] = {0};
+    REPE(i, 1, n) {
+        total_t[i] = t[i] + total_t[i-1];
     }
     REPE(i, 1, n) {
         cin >> v[i];
     }
-    t[0] = 0;
     v[0] = v[n+1] = 0;
     t[n+1] = LLONG_MAX; // 使わない
     double ans = 0;
-    REPE(i, 1, n) {
-        if (v[i] < v[i+1]) {
-            if (v[i-1] + t[i] < v[i]) {
-                double h = v[i-1] + t[i];
-                ans += (v[i-1] + h) * t[i] / 2.0;
-            }
-            else {
-                ans += t[i] * v[i];
-                // 加速するなら、その分を引く
-                ans -= (v[i]-v[i-1]) * (v[i]-v[i-1]) / 2.0;
+    double left, right;
+    left = 0;
+    REPE(i, 1, n){
+        double th1, th2, th3;
 
+        //cout << "i: " << i << endl;
+        for (double cur = total_t[i-1]+0.5; cur <= total_t[i]; cur += 0.5) {
+            th1 = v[i];
+            th2 = th3 = LLONG_MAX;
+            REPE(j, 1, n) {
+                if (j <= i)
+                    th2 = min(th2, v[j-1] + (cur - total_t[j-1]));
+                if (j >= i)
+                    th3 = min(th3, v[j+1] + (total_t[j] - cur));
             }
-        }
-        else {
-            //cout << "a" << endl;
-            if (t[i] < (v[i]-v[i-1]+v[i]-v[i+1])) {
-                //cout << "b" << endl;
-                double x;
-                x = (t[i] - v[i-1]) / 2.0;
 
-                double h = v[i-1] + x;
-                ans += (v[i-1]+h) * x / 2.0;
-                ans += h * (t[i]-x) / 2.0;
-            }
-            else {
-                //cout << "c" << endl;
-                ans += t[i] * v[i];
-                // 加速するなら、その分を引く
-                if (v[i-1] < v[i])
-                    ans -= (v[i]-v[i-1]) * (v[i]-v[i-1]) / 2.0;
-                // 減速するなら、その分を引く
-                // TODO: これ、入力例3のときにおかしそう
-                if (v[i+1] < v[i])
-                    ans -= (v[i]-v[i+1]) * (v[i]-v[i+1]) / 2.0;
-            }
+            right = min({th1, th2, th3});
+            ans += (left + right) * 0.5 * 0.5;
+            //cout << "  add: " << (left + right) * 0.5 * 0.5;
+            //cout << "  (total: " << ans << ")";
+            //cout << "  (right, left): " << right << ", " << left << endl;
+            left = right;
         }
     }
     cout << fixed <<  ans << endl;
