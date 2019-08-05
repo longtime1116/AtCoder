@@ -52,47 +52,41 @@ int main() {
         else if (a_max < b[i]) {
             que.push(b[i]);
             que2.push(b[i]);
-
         }
     }
 
-
-    lli ans = 0;
+    lli ans1 = 0;
     lli damage = 0;
-    // b だけで減らす
+
+    // a_max_b を使うケース
+    damage += a_max_b;
+    ans1++;
     while (!que.empty()){
         lli x = que.top();
         que.pop();
         damage += x;
-        ans++;
+        ans1++;
         if (damage >= h)
             break;
     }
-
-    while (damage < h) {
-        damage += a_max;
-        ans++;
+    if (damage < h) {
+        ans1 += ((h+a_max-1) - damage) / a_max;
     }
 
-    // 一回分を a_max_b に置き換える
-    //cout << "a_max_b" << a_max_b << endl;
-    //cout << "damage" << damage << endl;
-    //cout << "ans" << ans << endl;
-    damage += a_max_b;
-    ans++;
-    while (damage >= h) {
-        if (ans == que2.size())
-            break;
-        damage -= a_max;
-        ans--;
-    }
-    while (!que2.empty()) {
-        if (ans == 0 || damage < h)
-            break;
+    lli ans2 = 0;
+    damage = 0;
+    // a_max_b を使わないケース
+    while (!que2.empty()){
         lli x = que2.top();
         que2.pop();
-        damage -= x;
-        ans--;
+        damage += x;
+        ans2++;
+        if (damage >= h)
+            break;
     }
-    cout << ans+1 << endl;
+    if (damage < h) {
+        ans2 += ((h+a_max-1) - damage) / a_max;
+    }
+
+    cout << min(ans1, ans2) << endl;
 }
