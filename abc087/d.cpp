@@ -39,8 +39,12 @@ lli x[100001];
 
 bool rec(lli num, lli cur_x) {
     REP(i, 0, G[num].size()) {
-        if (x[G[num][i].to] != INF && x[G[num][i].to] != cur_x + G[num][i].cost)
-            return false;
+        if (x[G[num][i].to] != INF) {
+            if (x[G[num][i].to] != cur_x + G[num][i].cost) {
+                return false;
+            }
+            continue;
+        }
         x[G[num][i].to] = cur_x + G[num][i].cost;
         if (!rec(G[num][i].to, x[G[num][i].to]))
             return false;
@@ -52,6 +56,7 @@ int main() {
     lli n,m;
     cin2(n, m);
 
+    set<lli> s;
     lli l[m];
     lli r[m];
     lli d[m];
@@ -61,18 +66,26 @@ int main() {
 
     REP(i, 0, m) {
         G[l[i]].push_back({r[i], d[i]});
+        s.insert(l[i]);
+        s.insert(r[i]);
     }
+    REP(i, 0, m) {
+        s.erase(r[i]);
+    }
+    if (s.size() == 0)
+        goto NO;
+
     // n 人目の位置
     REP(i, 0, 100001) {
         x[i] = INF;
     }
 
-    REP(i, 0, m) {
-        if (x[l[i]] != INF)
+    REPIT(it, s) {
+        if (x[*it] != INF)
             continue;
 
-        x[l[i]] = 0;
-        if (!rec(l[i], 0))
+        x[*it] = 0;
+        if (!rec(*it, 0))
             goto NO;
     }
 
