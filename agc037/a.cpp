@@ -31,6 +31,9 @@ int main() {
     string s;
     cin1(s);
     string prev = s.substr(0, 1);
+    // char 型の変数に入れてそのポインタを std::string にわたすのもあり
+    //char x = s[0];
+    //string prev = string(&x);
     string cur = "";
     lli ans = 1;
     REP(i, 1, s.length()) {
