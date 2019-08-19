@@ -27,6 +27,8 @@ using namespace std;
 typedef long long int lli;
 typedef pair<lli, lli> P;
 
+
+
 int main() {
     string s, t;
     cin2(s, t);
@@ -36,6 +38,25 @@ int main() {
     lli ans = 0;
     lli sl = s.length();
     lli tl = t.length();
+
+    map<char, vector<lli>> m;
+
+    REP(i, 0, sl) {
+        m[s[i]].push_back(i);
+    }
+    REP(i, 0, 26) {
+        sort(m['a'+i].begin(), m['a'+i].end());
+
+    }
+
+    REPIT(it, m) {
+        cout << it->first << ": ";
+        REP(i, 0, (it->second.size())) {
+            cout << it->second[i] << ", ";
+        }
+        cout << endl;
+    }
+
     while (true) {
         ans++;
         if (s[j] == t[cur]) {
