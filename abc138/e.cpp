@@ -32,10 +32,6 @@ typedef pair<lli, lli> P;
 int main() {
     string s, t;
     cin2(s, t);
-    lli j = 0;
-    lli cur = 0;
-    lli count = 0;
-    lli ans = 0;
     lli sl = s.length();
     lli tl = t.length();
 
@@ -44,34 +40,44 @@ int main() {
     REP(i, 0, sl) {
         m[s[i]].push_back(i);
     }
-    REP(i, 0, 26) {
-        sort(m['a'+i].begin(), m['a'+i].end());
+    //REP(i, 0, sl) {
+    //    vector<lli> x = m[s[i]];
+    //    REP(j, 0, x.size()) {
+    //        cout << x[j] << endl;
+    //    }
+    //}
+    //REPIT(it, m) {
+    //    cout << it->first << ": ";
+    //    REP(i, 0, (it->second.size())) {
+    //        cout << it->second[i] << ", ";
+    //    }
+    //    cout << endl;
+    //}
 
-    }
-
-    REPIT(it, m) {
-        cout << it->first << ": ";
-        REP(i, 0, (it->second.size())) {
-            cout << it->second[i] << ", ";
+    lli count = 0;
+    lli pos = -1;
+    lli cur = 0;
+    while(cur < tl) {
+        // ↓をやると、TLEになる。コピーに時間がかかりすぎる
+        //vector<lli> vec = m[t[cur]];
+        auto it = upper_bound(m[t[cur]].begin(), m[t[cur]].end(), pos);
+        if (it == m[t[cur]].end()) {
+            //cout << "if" << endl;
+            //cout1(cur);
+            if (pos == -1) {
+                cout << -1 << endl;
+                return 0;
+            }
+            count++;
+            pos = -1;
         }
-        cout << endl;
-    }
-
-    while (true) {
-        ans++;
-        if (s[j] == t[cur]) {
-            count = 0;
+        else {
+            //cout << "else" << endl;
+            //cout1(cur);
+            //cout1(*it);
+            pos = *it;
             cur++;
-            if (cur == tl)
-                break;
-        }
-
-        count++;
-        j = (j + 1) % sl;
-        if (count == sl+1) {
-            cout << -1 << endl;
-            return 0;
         }
     }
-    cout << ans << endl;
+    cout << count * sl + pos+1 << endl;
 }
