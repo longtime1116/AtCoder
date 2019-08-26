@@ -27,6 +27,42 @@ using namespace std;
 typedef long long int lli;
 typedef pair<lli, lli> P;
 
+
+lli yoko(lli h, lli w) {
+    if (h <= 2 && w <= 2)
+        return LLONG_MAX;
+    if (h % 3 == 0) {
+        return 0;
+    }
+    else {
+        return w;
+    }
+}
+
+lli yokotate(lli h, lli w) {
+    // ha は h / 3 か h / 3 + 1 のいずれか
+    // wb/wc は w / 2 か w / 2 + 1 のいずれか
+    lli ret = LLONG_MAX;
+    REPE(ha, h/3, h/3+1) {
+        REPE(wb, w/2, w/2+1) {
+            // h が 2 のケースをケア
+            if (ha == 0)
+                continue;
+
+            lli hb, hc;
+            lli wa, wc;
+            hb = hc =  h - ha;
+            wa = w;
+            wc = w - wb;
+
+            lli max_area = max({wa * ha, wb * hb, wc * hc});
+            lli min_area = min({wa * ha, wb * hb, wc * hc});
+            ret = min(ret, max_area - min_area);
+        }
+    }
+    return ret;
+}
+
 int main() {
     lli h, w;
     cin2(h, w);
@@ -35,81 +71,17 @@ int main() {
     lli ans2 = LLONG_MAX;
     lli ans3 = LLONG_MAX;
     lli ans4 = LLONG_MAX;
+
+
     // 横斬り
-
-    if (h > 2) {
-        if (h % 3 == 2) {
-            lli x = (h + 1) / 3;
-            lli y = (h - x) / 2;
-            ans1 = (x - y) * w;
-        }
-        else {
-            lli x = h / 3;
-            lli y = h - x*2;
-            ans1 = (y - x) * w;
-
-        }
-    }
-
-    // 縦斬り
-    if (w > 2) {
-        if (w % 3 == 2) {
-            lli x = (w + 1) / 3;
-            lli y = (w - x) / 2;
-            ans2 = (x - y) * h;
-        }
-        else {
-            lli x = w / 3;
-            lli y = w - x*2;
-            ans2 = (y - x) * h;
-
-        }
-    }
-
+    ans1 = yoko(h, w);
     // 縦横斬り、横先
-    lli xh = h / 3;
-    lli yw = w / 2;
-    REPE(i, xh, xh+1) {
-        lli a = i * w;
-        REPE(j, yw, yw+1) {
-            if (i == 0 || j == 0)
-                continue;
-            lli b = j * (h-i);
-            lli c = (w-j) * (h-i);
-            lli min_men = min({a, b, c});
-            lli max_men = max({a, b, c});
-            ans3 = min(ans3, max_men - min_men);
-            //cout1(a);
-            //cout1(b);
-            //cout1(c);
-            //cout1(max_men);
-            //cout1(min_men);
-            //cout1(ans3);
-        }
-    }
-
-
+    ans2 = yokotate(h, w);
+    // 縦斬り
+    ans3 = yoko(w, h);
     // 縦横斬り、縦先
-    lli xw = w / 3;
-    lli yh = h / 2;
-    REPE(i, xw, xw+1) {
-        lli a = i * h;
-        REPE(j, yh, yh+1) {
-            if (i == 0 || j == 0)
-                continue;
-            lli b = j * (w-i);
-            lli c = (h-j) * (w-i);
-            lli min_men = min({a, b, c});
-            lli max_men = max({a, b, c});
-            ans4 = min(ans4, max_men - min_men);
-            //cout1(a);
-            //cout1(b);
-            //cout1(c);
-            //cout1(max_men);
-            //cout1(min_men);
-            //cout1(ans3);
-        }
-    }
+    ans4 = yokotate(w, h);
+
     //cout1(ans1);
     //cout1(ans2);
     //cout1(ans3);
