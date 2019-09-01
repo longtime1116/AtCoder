@@ -17,6 +17,8 @@ using namespace std;
 
 // output
 #define cout1(x)         cout << #x << ": " << x << endl;
+#define cout2(x, y)      cout << #x << ": " << x << ", " << #y << ": " << y << endl;
+#define cout3(x, y, z)   cout << #x << ": " << x << ", " << #y << ": " << y << ", " << #z << ": " << z << endl;;
 #define ncout1(n, x)     REP(i, 0, n) {cout << #x << "[" << i << "]: "<< x[i] << endl;}
 
 // sort
@@ -26,6 +28,7 @@ using namespace std;
 
 typedef long long int lli;
 typedef pair<lli, lli> P;
+typedef tuple<lli, lli, lli> tup;
 
 int main() {
     lli n;
