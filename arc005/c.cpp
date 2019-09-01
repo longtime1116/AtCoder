@@ -32,7 +32,7 @@ typedef tuple<lli, lli, lli> tup;
 
 lli h, w;
 string s[501];
-bool done[501][501][3];
+int done[501][501];
 
 
 int main() {
@@ -58,6 +58,12 @@ int main() {
         }
     }
 
+    REP(i, 0, 501) {
+        REP(j, 0, 501) {
+            done[i][j] = -1;
+        }
+    }
+
     queue<tup> que;
     que.push(tup(si, sj, 0));
     lli move_r[] = {-1, 1, 0, 0};
@@ -68,14 +74,10 @@ int main() {
         que.pop();
         if (x > 2)
             continue;
-        bool is_done = false;
-        REPE(i, 0, x) {
-            if (done[r][c][i])
-                is_done = true;
-        }
-        if (is_done)
+        if (done[r][c] >= 0 && done[r][c] <= x)
             continue;
-        done[r][c][x] = true;
+
+        done[r][c] = x;
         //cout3(r, c, x);
         REP(i, 0, 4) {
             if (r+move_r[i] < 0 || r+move_r[i] > h-1 ||
@@ -88,12 +90,8 @@ int main() {
             que.push(tup(r+move_r[i], c+move_c[i], next_x));
         }
     }
-    REP(i, 0, 3) {
-        if (done[gi][gj][i]) {
-            cout << "YES" << endl;
-            return 0;
-        }
-    }
-    cout << "NO" << endl;
-
+    if (done[gi][gj] >= 0)
+        cout << "YES" << endl;
+    else
+        cout << "NO" << endl;
 }
