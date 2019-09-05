@@ -21,6 +21,8 @@ using namespace std;
 #define cout3(x, y, z)   cout << #x << ": " << x << ", " << #y << ": " << y << ", " << #z << ": " << z << endl;;
 #define ncout1(n, x)     REP(i, 0, n) {cout << #x << "[" << i << "]: "<< x[i] << endl;}
 
+#define coutp(p)         cout << #p << ":" <<  " (" << p.first << ", " << p.second << ")" << endl;
+
 // sort
 #define sort_r(x, y)        sort(x, y, greater<lli>()); // 降順(5,4,3,,,)
 
