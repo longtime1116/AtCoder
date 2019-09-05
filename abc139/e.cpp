@@ -59,49 +59,6 @@ int main() {
         }
     }
 
-    //REPIT(it, G) {
-    //    P  p1 = it->first;
-    //    cout << "(" << p1.first << ", " << p1.second << ")" << " => ";
-    //    vector<P>  pv = it->second;
-    //    for (lli i = 0; i < pv.size(); i++) {
-    //        P p2 = pv[i];
-    //        cout << "(" << p2.first << ", " << p2.second << ")" << "=>";
-    //    }
-    //    cout << endl;
-    //}
-
-    //lli ans = 0;
-    //REP(i, 0, n*(n-1)/2) {
-    //    bool updated = false;
-    //    cout1(i);
-    //    REPIT(it, G) {
-    //        P  p = it->first;
-
-    //        vector<P> pv = it->second;
-    //        if (pv.size() == 0)
-    //            continue;
-    //        if (counts[p] != 0) {
-    //            continue;
-    //        }
-    //        updated = true;
-    //        ans++;
-    //        cout << "(" << p.first << ", " << p.second << ")" << endl;
-    //        // G[p] を巡回して、countsを減らしていく
-    //        REP(j, 0, pv.size()) {
-    //            cout << "hoge" << endl;
-    //            counts[pv[j]]--;
-    //            if (counts[pv[j]] == 0)
-    //                none_zero_count--;
-    //        }
-    //        it->second.erase(it->second.begin(), it->second.end());
-    //    }
-    //    if (none_zero_count == 0)
-    //        break;
-    //    if (!updated) {
-    //        cout << -1 << endl;
-    //        return 0;
-    //    }
-    //}
     lli ans = 0;
     queue<P> que;
     REPIT(it, G) {
@@ -111,23 +68,18 @@ int main() {
     }
     while (true) {
         ans++;
-        queue<P> que2;
-        while (!que.empty()) {
+        lli num = que.size();
+        REP(i, 0, num) {
             P p = que.front();
             que.pop();
             vector<P> pv = G[p];
-            REP(i, 0, pv.size()) {
-                counts[pv[i]]--;
-                if (counts[pv[i]] == 0) {
+            REP(j, 0, pv.size()) {
+                counts[pv[j]]--;
+                if (counts[pv[j]] == 0) {
                     none_zero_count--;
-                    que2.push(pv[i]);
+                    que.push(pv[j]);
                 }
             }
-        }
-        // que2 を que1 に移す
-        while (!que2.empty()) {
-            que.push(que2.front());
-            que2.pop();
         }
         if (que.empty())
             break;
@@ -136,35 +88,4 @@ int main() {
         cout << -1 << endl;
     else
         cout << ans << endl;
-    //REP(i, 0, n*(n-1)/2) {
-    //    bool updated = false;
-    //    cout1(i);
-    //    REPIT(it, G) {
-    //        P  p = it->first;
-
-    //        vector<P> pv = it->second;
-    //        if (pv.size() == 0)
-    //            continue;
-    //        if (counts[p] != 0) {
-    //            continue;
-    //        }
-    //        updated = true;
-    //        ans++;
-    //        cout << "(" << p.first << ", " << p.second << ")" << endl;
-    //        // G[p] を巡回して、countsを減らしていく
-    //        REP(j, 0, pv.size()) {
-    //            cout << "hoge" << endl;
-    //            counts[pv[j]]--;
-    //            if (counts[pv[j]] == 0)
-    //                none_zero_count--;
-    //        }
-    //        it->second.erase(it->second.begin(), it->second.end());
-    //    }
-    //    if (none_zero_count == 0)
-    //        break;
-    //    if (!updated) {
-    //        cout << -1 << endl;
-    //        return 0;
-    //    }
-    //}
 }
