@@ -36,28 +36,60 @@ int main() {
     lli a, b;
     cin2(a, b);
 
-    b++;
-    lli div = 2;
-    lli ans = 0;
-    while (true) {
-        lli half = div/2;
-        lli ap = a/div;
-        lli aq = a%div;
-        lli a_count = ap * (div/2);
-        if (half < aq)
-            a_count += aq- half;
-
-        lli bp = b/div;
-        lli bq = b%div;
-        lli b_count = bp * (div/2);
-        if (half < bq)
-            b_count += bq- half;
-        if ((b_count - a_count) % 2 == 1)
-            ans += half;
-        div *= 2;
-        if (half > b)
-            break;
+    // 以下の2つの性質を用いる
+    //  1. 偶数 n について、n xor n+1 は 1 となる
+    //  2. m xor m は 常に 0 なので、aからbまでのxorは、0からa-1までのxorと0からbまでのxorのxorで良い
+    a--;
+    lli fa;
+    if (a % 2 == 0) {
+        fa = a;
+        if ((a/2) % 2 == 1)
+            fa++;
     }
-    cout << ans << endl;
+    else {
+        fa = 0;
+        if ((((a+1) / 2) % 2 == 1))
+            fa = 1;
+    }
+
+    lli fb;
+    if (b % 2 == 0) {
+        fb = b;
+        if ((b/2) % 2 == 1)
+            fb++;
+    }
+    else {
+        fb = 0;
+        if ((((b+1) / 2) % 2 == 1))
+            fb = 1;
+    }
+    //cout1(fa);
+    //cout1(fb);
+    cout << (fa ^ fb) << endl;
+
+    // 以下の解法は、O(log(B))
+    //b++;
+    //lli div = 2;
+    //lli ans = 0;
+    //while (true) {
+    //    lli half = div/2;
+    //    lli ap = a/div;
+    //    lli aq = a%div;
+    //    lli a_count = ap * (div/2);
+    //    if (half < aq)
+    //        a_count += aq- half;
+
+    //    lli bp = b/div;
+    //    lli bq = b%div;
+    //    lli b_count = bp * (div/2);
+    //    if (half < bq)
+    //        b_count += bq- half;
+    //    if ((b_count - a_count) % 2 == 1)
+    //        ans += half;
+    //    div *= 2;
+    //    if (half > b)
+    //        break;
+    //}
+    //cout << ans << endl;
 
 }
