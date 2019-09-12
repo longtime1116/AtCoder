@@ -32,8 +32,6 @@ typedef long long int lli;
 typedef pair<lli, lli> P;
 typedef tuple<lli, lli, lli> tup;
 
-lli ans[10000000001];
-
 lli calc_dist(lli cur, lli s_l, lli s_r, lli t_l, lli t_r) {
 
     return min({
@@ -68,45 +66,28 @@ int main() {
         y[i] = x[i];
     }
 
+    map<lli, lli> m;
+
     sort(s, s+a);
     sort(t, t+b);
     sort(y, y+q);
 
-    //lli s_cur = 0;
-    //lli t_cur = 0;
-    //lli y_cur = 0;
-    //REP(i, 1, 10000000001) {
-    //    if (s[s_cur+1] == i)
-    //        s_cur++;
-    //    if (t[t_cur+1] == i)
-    //        t_cur++;
-    //    if (i != y[y_cur])
-    //        continue;
-    //    y_cur++;
-    //    //cout1(y_cur-1);
-    //    //cout1(y[y_cur-1]);
-    //    lli s_l = s[s_cur];
-    //    lli s_r = s[s_cur + 1];
-    //    lli t_l = t[t_cur];
-    //    lli t_r = t[t_cur + 1];
-
-    //    //cout1(i);
-    //    //cout1(s_l);
-    //    //cout1(s_r);
-    //    //cout1(t_l);
-    //    //cout1(t_r);
-    //    ans[i] = calc_dist(i, s_l, s_r, t_l, t_r);
-    //    //cout1(ans[i]);
-    //    //cout << endl;
-    //    if (y_cur == q)
-    //        break;
-    //}
-
-    //REP(i, 0, q) {
-    //    cout << ans[x[i]] << endl;
-    //}
-
-
-
-
+    lli s_cur = 0;
+    lli t_cur = 0;
+    REP(i, 0, q) {
+        while (s[s_cur+1] <= y[i]) {
+            s_cur++;
+        }
+        while (t[t_cur+1] <= y[i]) {
+            t_cur++;
+        }
+        lli s_l = s[s_cur];
+        lli s_r = s[s_cur + 1];
+        lli t_l = t[t_cur];
+        lli t_r = t[t_cur + 1];
+        m[y[i]] = calc_dist(y[i], s_l, s_r, t_l, t_r);
+    }
+    REP(i, 0, q) {
+        cout << m[x[i]] << endl;
+    }
 }
