@@ -32,35 +32,63 @@ typedef long long int lli;
 typedef pair<lli, lli> P;
 typedef tuple<lli, lli, lli> tup;
 
+void z_algorithm(const string s, lli *z) {
+    lli len = s.length();
 
-// dp[i][j]: i文字目からの文字とj文字目からの文字の最長の重なり
-lli dp[5001][5001];
+    // 0文字目に何を入れたいかに依る
+    z[0] = 0;
+
+    lli left = 0;
+    lli right = 0;
+    REP(i, 1, len) {
+        if (i > right) {
+            left = right = i;
+            while (true) {
+                if (right >= len || s[right-left] != s[right])
+                    break;
+                right++;
+            }
+            z[i] = right - left;
+            right--;
+        }
+        else {
+            lli j = i - left;
+            // z-box の範囲に収まっている場合はそのままz-boxの値を入れれば良い
+            if (z[j] < right - i + 1) {
+                z[i] = z[j];
+            }
+            else {
+                left = i;
+                while (true) {
+                    if (right >= len || s[right-left] != s[right])
+                        break;
+                    right++;
+                }
+                z[i] = right - left;
+                right--;
+            }
+
+        }
+
+    }
+}
 
 int main() {
     lli n;
     string s;
     cin1(n);
     cin1(s);
-    REPE(i,0,n-2) {
-        if (s[n-1] == s[i]) {
-            dp[n-1][i] = 1;
-        }
-    }
-    for (lli i = n-2; i >= 0; i--) {
-        for (lli j = i-1; j >= 0; j--) {
-            if (s[i] == s[j]) {
-                dp[i][j] = min(i - j, dp[i+1][j+1] + 1);
-
-            }
-        }
-    }
     lli ans = 0;
-    for (lli i = n-2; i >= 0; i--) {
-        for (lli j = i-1; j >= 0; j--) {
-            //cout2(i,j);
-            //cout1(dp[i][j]);
-            ans = max(ans, dp[i][j]);
+    REP(i,0,n) {
+        lli z[n-i];
+        z_algorithm(s.substr(i), z);
+
+        //cout << s.substr(i,n-i) << endl;
+        REP(j,0,n-i) {
+            ans = max(ans, min(z[j], j));
+            //cout << z[j];
         }
+        //cout << endl;
     }
     cout << ans << endl;
 }
