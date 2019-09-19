@@ -45,6 +45,8 @@ $ln -s /usr/local/bin/g++-5 /usr/local/bin/g++
   * ABC129 E
 * 最長増加部分列
   * ABC006 D
+* ロリハ+二分探索、Z-Algorithm
+  * ABC141 E
 * combination の計算(パスカルの三角形)
   * ABC110 D
 * 素因数分解の取得
