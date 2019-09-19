@@ -43,8 +43,8 @@ int main() {
     REP(cx,0,101) {
         REP(cy,0,101) {
             bool is_ans = true;
-            // 1つめのケースから、Hを出す
-            lli H;
+            // h[i]がゼロではないケースから、Hを出す
+            lli H = -1;
             REP(i,0,n) {
                 if (h[i] != 0) {
                     H = h[i] + abs(x[i]-cx) + abs(y[i]-cy);
@@ -53,9 +53,17 @@ int main() {
             }
             REP(i,0,n) {
                 // 全部の計算結果が H と一致するのであればそれがこたえ
-                if (H !=h[i] + abs(x[i]-cx) + abs(y[i]-cy)) {
-                    is_ans = false;
-                    break;
+                if (h[i] == 0) {
+                    if (H -  abs(x[i]-cx) - abs(y[i]-cy) > 0) {
+                        is_ans = false;
+                        break;
+                    }
+                }
+                else {
+                    if (H !=h[i] + abs(x[i]-cx) + abs(y[i]-cy)) {
+                        is_ans = false;
+                        break;
+                    }
                 }
             }
             if (is_ans) {
@@ -64,4 +72,5 @@ int main() {
             }
         }
     }
+    cout << 0 << endl;
 }
