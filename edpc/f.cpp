@@ -42,31 +42,25 @@ int main() {
     lli slen = s.length();
     lli tlen = t.length();
 
+    s = "#" + s;
+    t = "." + t;
     lli ans = 0;
-    REP(i,0,slen) {
-        REP(j,0,tlen) {
+    REPE(i,1,slen) {
+        REPE(j,1,tlen) {
             if (s[i] == t[j]) {
-                //dp[i][j] = max(dp[i-1][j], dp[i][j-1]+1);
-                if (j == 0)
-                    dp[i][j] = 1;
-                else
-                    dp[i][j] = dp[i][j-1]+1;
+                //dp[i][j] = max(dp[i-1][j-1], dp[i][j-1]) + 1;
+                dp[i][j] = dp[i-1][j-1] + 1;
+                //cout << "if" << endl;
+                //cout2(i,j);
+                //cout1(dp[i][j])
             }
             else {
-                lli x, y;
-                if (i == 0)
-                    x = 0;
-                else
-                    x = dp[i-1][j];
-
-                if (j == 0)
-                    y = 0;
-                else
-                    y = dp[i][j-1];
-
-
-
-                dp[i][j] = max(x,y);
+                dp[i][j] = max(dp[i-1][j], dp[i][j-1]);
+                //dp[i][j] = dp[i][j-1];
+                //dp[i][j] = dp[i-1][j-1];
+                //cout << "else" << endl;
+                //cout2(i,j);
+                //cout1(dp[i][j])
             }
         }
     }
@@ -76,5 +70,16 @@ int main() {
     //        cout1(dp[i][j]);
     //    }
     //}
-    cout << dp[slen-1][tlen-1] << endl;
+    cout << dp[slen][tlen] << endl;
 }
+
+
+//abracadabra
+//avadakedavra
+//
+//111111111111
+//111111111111
+//111111111122
+//112222222222
+//
+//
