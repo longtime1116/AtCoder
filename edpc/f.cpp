@@ -2,8 +2,10 @@
 using namespace std;
 
 // iterator
-#define REP(i,init, n) for(lli i=init;i<n;i++)
-#define REPE(i,init, n) for(lli i=init;i<=n;i++)
+#define REP(i,from, to) for(lli i=from;i<to;i++)
+#define REPE(i,from, to) for(lli i=from;i<=to;i++)
+#define REP_R(i,from, to) for(lli i=from;i>to;i--)
+#define REPE_R(i,from, to) for(lli i=from;i>=to;i--)
 #define REPIT(it,container) for(auto it = container.begin(); it != container.end(); it++)
 #define REPIT_R(it,container) for(auto it = container.rbegin(); it != container.rend(); it++)
 
@@ -44,7 +46,6 @@ int main() {
 
     s = "#" + s;
     t = "." + t;
-    lli ans = 0;
     REPE(i,1,slen) {
         REPE(j,1,tlen) {
             if (s[i] == t[j]) {
@@ -64,22 +65,70 @@ int main() {
             }
         }
     }
-    //REP(i,0,slen) {
-    //    REP(j,0,tlen) {
-    //        cout2(i,j);
-    //        cout1(dp[i][j]);
+    //REPE(i,0,slen) {
+    //    REPE(j,0,tlen) {
+    //        cout<<dp[i][j];
     //    }
+    //    cout << endl;
     //}
-    cout << dp[slen][tlen] << endl;
+    //cout << dp[slen][tlen] << endl;
+
+    vector<lli> ans;
+    lli j_cur = tlen;
+    REP_R(i,slen, 0) {
+        lli cur = dp[i][j_cur];
+        if (cur == 0)
+            break;
+        if (cur == dp[i-1][j_cur])
+            continue;
+        REP_R(j,j_cur,0) {
+            if (s[i] == t[j]) {
+                ans.push_back(j);
+                j_cur = j-1;
+                break;
+            }
+        }
+        if (j_cur == 0)
+            break;
+    }
+    REP(i,0,ans.size()) {
+        cout << t[ans[ans.size()-1-i]];
+    }
+    cout<<endl;
 }
 
+// axyb
+// abyxb
+//000000
+//011111
+//011122
+//011222
+//012223
 
-//abracadabra
-//avadakedavra
-//
-//111111111111
-//111111111111
-//111111111122
-//112222222222
-//
-//
+// abracadabra
+// avadakedavra
+//0000000000000
+//0111111111111
+//0111111111111
+//0111111111122
+//0112222222223
+//0112222222223
+//0112233333333
+//0112333344444
+//0112344445555
+//0112344445555
+//0112344445566
+//0112344445567
+
+
+//aaabcaaa
+//bbaaacaaabcaa
+//00000000000000
+//00011111111111
+//00012222222222
+//00012333333333
+//01112333334444
+//01112344444555
+//01122345555566
+//01123345666667
+//01123445677777
