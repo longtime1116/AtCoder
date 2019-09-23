@@ -46,6 +46,8 @@ $ln -s /usr/local/bin/g++-5 /usr/local/bin/g++
 * 桁DP
   * tdpc E
   * ABC129 E
+* 期待値DP
+  * edpc J
 * 最長増加部分列
   * ABC006 D
 * ロリハ+二分探索、Z-Algorithm
