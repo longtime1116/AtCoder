@@ -24,6 +24,8 @@ $ln -s /usr/local/bin/g++-5 /usr/local/bin/g++
     * 状態
     * 遷移(漸化式)
     * 埋める順番
+* 絶対誤差を指定
+  * `cout << std::setprecision(10) <<  ans << endl;`
 
 # 参考
 
