@@ -36,27 +36,122 @@ typedef tuple<lli, lli, lli> tup;
 
 // dp[i] := i のときの期待値
 //          ただし、iは状態をbitで表す整数
-unsigned lli dp[2^17];
+//double dp[2^17];
+
+lli n;
+lli state[19];
+bool exist[19];
+lli left_i;
+lli right_i;
+
+// val 状態で left_i+i に投げる
+double rec(lli val, lli i, double *dp) {
+    if (val == 0)
+        return 0;
+    if (dp[val] != 0)
+        return dp[val];
+
+    double exist_count = 0;
+    REP(i,-1,2) {
+        if (exist[left_i+i])
+            exist_count += 1;
+    }
+    double l,m,r;
+    // 左
+    if (exist[left_i+i-1])
+        l = rec(val - (1<<(right_i-left_i-i+1)), i-1, dp);
+    else
+        l = 0;
+    // 真ん中
+    if (exist[left_i+i])
+        m = rec(val - (1<<(right_i-left_i-i)), i-1, dp);
+    else
+        m = 0;
+    // 右
+    if (exist[left_i+i+1])
+        r = rec(val - (1<<(right_i-left_i-i-1)), i-1, dp);
+    else
+        r = 0;
+
+    cout1(val);
+    cout<<"left" << endl;
+    cout1(left_i+i-1);
+    cout1(l);
+    cout<<"middle" << endl;
+    cout1(left_i+i);
+    cout1(m);
+    cout<<"right" << endl;
+    cout1(left_i+i+1);
+    cout1(r);
+    dp[val] = (l+m+r+1)/exist_count;
+    cout2(val, dp[val]);
+    cout<<endl;
+    return dp[val];
+}
 int main() {
-    lli n;
     cin1(n);
     lli x[n];
-    ncin1(n,x);
+    // x[i] は 1〜16 の値をとるとする
     REP(i,0,n) {
-        cin >> x[i+1];
+        cin >> x[i];
+        x[i]+=2;
     }
     sort(x, x+n);
     // x
-    // 1,3,7,8,9,10
+    // 2,4,8,9,10,11
+    // 入力自体は、0,2,6,7,8,9
 
+    REP(i,0,n) {
+        state[x[i]-1]++;
+        state[x[i]]++;
+        state[x[i]+1]++;
+        exist[x[i]] = true;
+    }
+    REP(i,0,19) {
+        cout1(state[i]);
+    }
+    cout<<endl;
+    REP(i,0,19) {
+        cout1(exist[i]);
+    }
     // 分割した上で一個ずつ処理する
+    lli next_start = 0;
+    double ans = 0;
     {
+        double ans_cur;
         // 影響のあるところだけを抜き出す
         vector<lli> cur;
-        REP(i,0,n){
+        bool start = false;
+        REP(i,next_start,19){
+            if (!start) {
+                if (state[i] != 0) {
+                    start = true;
+                    left_i = i;
+                }
+            }
+            else if (state[i] == 0) {
+                break;
+            }
+            right_i = i;
         }
+        cout2(left_i, right_i);
+        lli val = 0;
+        REPE(i,left_i,right_i) {
+            val = val << 1;
+            if (exist[i])
+                val += 1;
+        }
+        cout1(val);
+        double dp[2^19] = {0};
         // その範囲で、すべての箇所から初めて一番期待値が低いやつ選ぶ
+        REPE(i,0,right_i-left_i) {
+            ans_cur = min(ans, rec(val, i, dp));
+        }
+        ans += ans_cur;
+
+        next_start = right_i+1;
     }
     // 全部足す
 
+    cout << ans << endl;
 }
