@@ -46,30 +46,43 @@ lli right_i;
 
 // val 状態で left_i+i に投げる
 double rec(lli val, lli i, double *dp) {
+    //cout2(val, i);
     if (val == 0)
         return 0;
     if (dp[val] != 0)
         return dp[val];
 
     double exist_count = 0;
-    REP(i,-1,2) {
-        if (exist[left_i+i])
+    REP(j,-1,2) {
+        if (exist[left_i+i+j])
             exist_count += 1;
     }
+    if (exist_count == 0)
+        return 0;
+
     double l,m,r;
     // 左
-    if (exist[left_i+i-1])
+    if (left_i+i-1>=0 && exist[left_i+i-1]) {
+        exist[left_i+i-1] = false;
         l = rec(val - (1<<(right_i-left_i-i+1)), i-1, dp);
+        exist[left_i+i-1] = true;
+    }
     else
         l = 0;
     // 真ん中
-    if (exist[left_i+i])
+    if (left_i+i>=0 && exist[left_i+i]) {
+        exist[left_i+i] = false;
         m = rec(val - (1<<(right_i-left_i-i)), i, dp);
+        exist[left_i+i] = true;
+    }
     else
         m = 0;
     // 右
-    if (exist[left_i+i+1])
+    if (left_i+i+1>=0 && exist[left_i+i+1]) {
+        exist[left_i+i+1] = false;
         r = rec(val - (1<<(right_i-left_i-i-1)), i+1, dp);
+        exist[left_i+i+1] = true;
+    }
     else
         r = 0;
 
@@ -83,7 +96,9 @@ double rec(lli val, lli i, double *dp) {
     cout<<"right" << endl;
     cout1(left_i+i+1);
     cout1(r);
-    dp[val] = (l+m+r+1)/exist_count;
+    cout1(l+m+r+1);
+    cout1(exist_count);
+    dp[val] = (l+m+r+1)/(double)exist_count;
     cout2(val, dp[val]);
     cout<<endl;
     return dp[val];
@@ -144,6 +159,9 @@ int main() {
         cout1(val);
         // その範囲で、すべての箇所から初めて一番期待値が低いやつ選ぶ
         REPE(i,0,right_i-left_i) {
+
+            if (i != 2)
+                continue;
             double dp[2^19] = {0};
             cout << i << "====================================" << endl;;
             ans_cur = min(ans, rec(val, i, dp));
