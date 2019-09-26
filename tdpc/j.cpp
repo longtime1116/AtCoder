@@ -64,12 +64,12 @@ double rec(lli val, lli i, double *dp) {
         l = 0;
     // 真ん中
     if (exist[left_i+i])
-        m = rec(val - (1<<(right_i-left_i-i)), i-1, dp);
+        m = rec(val - (1<<(right_i-left_i-i)), i, dp);
     else
         m = 0;
     // 右
     if (exist[left_i+i+1])
-        r = rec(val - (1<<(right_i-left_i-i-1)), i-1, dp);
+        r = rec(val - (1<<(right_i-left_i-i-1)), i+1, dp);
     else
         r = 0;
 
@@ -118,7 +118,7 @@ int main() {
     lli next_start = 0;
     double ans = 0;
     {
-        double ans_cur;
+        double ans_cur = DBL_MAX;
         // 影響のあるところだけを抜き出す
         vector<lli> cur;
         bool start = false;
@@ -142,10 +142,13 @@ int main() {
                 val += 1;
         }
         cout1(val);
-        double dp[2^19] = {0};
         // その範囲で、すべての箇所から初めて一番期待値が低いやつ選ぶ
         REPE(i,0,right_i-left_i) {
+            double dp[2^19] = {0};
+            cout << i << "====================================" << endl;;
             ans_cur = min(ans, rec(val, i, dp));
+            cout1(dp[val]);
+            cout1(ans_cur);
         }
         ans += ans_cur;
 
