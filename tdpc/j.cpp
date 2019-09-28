@@ -41,6 +41,8 @@ typedef tuple<lli, lli, lli> tup;
 
 
 int state[18];
+// dp[i][j][k] := 前後含む3マスに何個ボールがあるのか、i,j,kをそれぞれ1,2,3個として、そのときの期待値
+double dp[18][18][18];
 
 int main() {
     lli n;
@@ -61,10 +63,18 @@ int main() {
         state[x[i]]++;
         state[x[i]+1]++;
     }
+    queue<int> que1;
+    queue<int> que2;
+    queue<int> que3;
     REP(i,0,18) {
         cout2(i, state[i]);
+        if (state[i] == 1)
+            que1.push(i);
+        else if (state[i] == 2)
+            que2.push(i);
+        else if (state[i] == 3)
+            que3.push(i);
     }
-    cout<<endl;
     double ans = 0;
     cout << ans << endl;
 }
