@@ -39,6 +39,7 @@ typedef tuple<lli, lli, lli> tup;
 //              kを0から|V|まで回せば、全ての点を中間地点として使う場合の全点間最短距離が
 //              算出されていることになる
 lli dp[301][301]; // k 個分用意しなくても上書きしてけば良いので、dp[i][j]のみ用意
+lli dp2[301][301]; // 最短経路が l 以下になっている場合に1の辺を貼るグラフ
 
 #define INF (LLONG_MAX / 3)
 
@@ -65,6 +66,7 @@ int main() {
             if (i == j)
                 continue;
             dp[i][j] = INF;
+            dp2[i][j] = INF;
         }
     }
 
@@ -75,11 +77,26 @@ int main() {
             }
         }
     }
+    REPE(i,1,n) {
+        REPE(j,i+1,n) {
+            if (dp[i][j] <= l) {
+                dp2[j][i] = dp2[i][j] = 1;
+            }
+            //cout3(i,j,dp[i][j]);
+        }
+    }
+    REPE(k, 1, n) {
+        REPE(i, 1, n) {
+            REPE(j, 1, n) {
+                dp2[j][i] = dp2[i][j] = min(dp2[i][j], dp2[i][k]+dp2[k][j]);
+            }
+        }
+    }
     REP(i,0,q) {
         if (dp[s[i]][t[i]] == INF)
             cout << -1 << endl;
         else
-            cout << (dp[s[i]][t[i]]-1) / l << endl;
+            cout << dp2[s[i]][t[i]]-1 << endl;
     }
 
 }
