@@ -33,6 +33,7 @@ using namespace std;
 typedef long long int lli;
 typedef pair<lli, lli> P;
 typedef tuple<lli, lli, lli> tup;
+typedef vector<lli> vlli;
 
 int main() {
     lli n;
