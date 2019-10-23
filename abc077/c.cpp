@@ -49,10 +49,31 @@ int main() {
     sort(b, b+n);
     sort(c, c+n);
 
-    lli ans = 0;
-
+    lli b_c[n];
     // まずbをすべて走査し、それぞれの値についてcが何個使えるかを計算する。O(nlogn)
     // そこから累積和の配列の形にできる
     // あとは、aのそれぞれについて二分探索でbのどの部分に当てはまるか見て、累積和のところからO(1)でとってくる(O(nlogn))
+    REP(i,0,n) {
+        auto it = upper_bound(c, c+n, b[i]);
+        b_c[i] = n-(it-c);
+        //cout2(i, b_c[i]);
+    }
+    lli b_c_sum[n] = {0};
+    b_c_sum[n-1] = b_c[n-1];
+    REPE_R(i,n-2,0) {
+        b_c_sum[i] = b_c_sum[i+1] + b_c[i];
+    }
+    REP(i,0,n) {
+        //cout2(i, b_c_sum[i]);
+    }
+
+    lli ans = 0;
+    REP(i,0,n) {
+        auto it = upper_bound(b, b+n, a[i]);
+        if (it == b+n)
+            continue;
+        ans += b_c_sum[it-b];
+        //cout2(i, b_c[i]);
+    }
     cout << ans << endl;
 }
