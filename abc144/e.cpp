@@ -58,19 +58,33 @@ int main() {
     lli left = max_cost;
     lli right = 1;
     while (true) {
-        cur = (left+right)/2;
-        // cur を実現できるか？
+        lli cur = (left+right)/2;
+        bool is_ok = true;
+
+        lli count = 0;
+        REP(i,0,n) {
+            // count を必要な分増やす
+
+            if (count > k) {
+                is_ok = false;
+                break;
+            }
+        }
 
 
-        // 終了かどうかを見る
-        if (left == right)
 
         if (is_ok) {
             right = cur;
+            if (right - 1 == left) {
+                ans = right;
+            }
         }
         else {
             left = cur;
+            if (right - 1 == left) {
+                ans = left;
+            }
         }
-
     }
+    cout << ans << endl;
 }
