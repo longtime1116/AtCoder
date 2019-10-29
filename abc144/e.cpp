@@ -44,10 +44,10 @@ int main() {
     sort(a,a+n);
     sort_r(f,f+n);
 
-    REP(i,0,n)
-        cout2(i,a[i]);
-    REP(i,0,n)
-        cout2(i,f[i]);
+    //REP(i,0,n)
+    //    cout2(i,a[i]);
+    //REP(i,0,n)
+    //    cout2(i,f[i]);
 
     lli max_cost = 0;
     REP(i,0,n) {
@@ -55,9 +55,9 @@ int main() {
     }
     lli ans = max_cost;
 
-    lli left = max_cost;
-    lli right = 1;
-    while (true) {
+    lli left = -1;
+    lli right = max_cost;
+    while (right - left > 1) {
         lli cur = (left+right)/2;
         bool is_ok = true;
 
@@ -65,6 +65,7 @@ int main() {
         REP(i,0,n) {
             // count を必要な分増やす
 
+            count += max((lli)0, a[i] - (cur/f[i]));
             if (count > k) {
                 is_ok = false;
                 break;
@@ -73,18 +74,15 @@ int main() {
 
 
 
+        //cout3(cur, right, left);
+        //cout1(is_ok);
         if (is_ok) {
             right = cur;
-            if (right - 1 == left) {
-                ans = right;
-            }
         }
         else {
             left = cur;
-            if (right - 1 == left) {
-                ans = left;
-            }
         }
     }
+    ans = right;
     cout << ans << endl;
 }
