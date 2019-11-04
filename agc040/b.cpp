@@ -1,0 +1,147 @@
+#include <bits/stdc++.h>
+using namespace std;
+
+// iterator
+#define REP(i,from, to) for(lli i=from;i<to;i++)
+#define REPE(i,from, to) for(lli i=from;i<=to;i++)
+#define REP_R(i,from, to) for(lli i=from;i>to;i--)
+#define REPE_R(i,from, to) for(lli i=from;i>=to;i--)
+#define REPIT(it,container) for(auto it = container.begin(); it != container.end(); it++)
+#define REPIT_R(it,container) for(auto it = container.rbegin(); it != container.rend(); it++)
+
+// input
+#define cin1(x)             cin >> x
+#define cin2(x, y)          cin >> x >> y
+#define cin3(x, y, z)       cin >> x >> y >> z
+#define ncin1(n, x)         REP(i, 0, n) {cin1(x[i]);}
+#define ncin2(n, x, y)      REP(i, 0, n) {cin2(x[i], y[i]);}
+#define ncin3(n, x, y, z)   REP(i, 0, n) {cin3(x[i], y[i], z[i]);}
+
+// output
+#define cout1(x)         cout << #x << ": " << x << endl;
+#define cout2(x, y)      cout << #x << ": " << x << ", " << #y << ": " << y << endl;
+#define cout3(x, y, z)   cout << #x << ": " << x << ", " << #y << ": " << y << ", " << #z << ": " << z << endl;;
+#define ncout1(n, x)     REP(i, 0, n) {cout << #x << "[" << i << "]: "<< x[i] << endl;}
+
+#define coutp(p)         cout << #p << ":" <<  " (" << p.first << ", " << p.second << ")" << endl;
+
+// sort
+#define sort_r(x, y)        sort(x, y, greater<lli>()); // 降順(5,4,3,,,)
+
+#define ARRAY_LENGTH(array) (sizeof(array) / sizeof(array[0]))
+
+typedef long long int lli;
+typedef pair<lli, lli> P;
+typedef tuple<lli, lli, lli> tup;
+typedef vector<lli> vlli;
+
+lli from_start[100001];
+lli from_last[100001];
+int main() {
+    lli n;
+    cin1(n);
+    P p[n];
+    REP(i,0,n) {
+        lli l, r;
+        cin >> l >> r;
+        p[i] = P(l, r);
+    }
+    sort(p, p+n);
+
+    // from_start
+    lli cur_s = 0;
+    lli cur_e = 1000000001;
+    bool is_out = false;
+    REPE(i,0,n-1) {
+        if (is_out) {
+            from_start[i] = 0;
+            continue;
+        }
+        lli from = p[i].first;
+        lli to = p[i].second;
+        if (cur_e < from) {
+            from_start[i] = 0;
+            is_out = true;
+        }
+        else if (cur_e >= to) {
+            from_start[i] = to - from+1;
+            cur_s = from;
+            cur_e = to;
+        }
+        else {
+            from_start[i] = cur_e - from + 1;
+            cur_s = from;
+        }
+    }
+
+    // from_last
+    cur_s = p[n-1].first;
+    cur_e = p[n-1].second;
+    from_last[n-1]= cur_e - cur_s + 1;
+    is_out = false;
+    REPE_R(i,n-2,0) {
+        if (is_out) {
+            from_last[i] = 0;
+            continue;
+        }
+        lli from = p[i].first;
+        lli to = p[i].second;
+        //cout1(i);
+        //cout2(cur_s, cur_e);
+        //cout2(from, to);
+        if (to < cur_s) {
+            from_last[i] = 0;
+            is_out = true;
+        }
+        else if (to <= cur_e) {
+            from_last[i] = to - cur_s+1;
+            cur_e = to;
+        }
+        else {
+            from_last[i] = cur_e - cur_s + 1;
+        }
+    }
+    lli ans = 0;
+    REP(i,1,n) {
+        //cout3(i,from_start[i-1], from_last[i]);
+        ans = max(ans, from_start[i-1] + from_last[i]);
+    }
+    lli ans2 = 0;
+    lli index;
+    // 特定の区間だけやるケース
+    REP(i,0,n) {
+        if (ans2 < p[i].second - p[i].first + 1) {
+            ans2 = max(ans2, p[i].second - p[i].first + 1);
+            index = i;
+        }
+    }
+    cur_s = cur_e = -1;
+    is_out = false;
+    lli from;
+    lli to;
+    REP(i,0,n) {
+        if (i == index)
+            continue;
+        if (cur_s == -1) {
+            cur_s = from = p[i].first;
+            cur_e = to = p[i].second;
+        }
+        else {
+            from = p[i].first;
+            to = p[i].second;
+        }
+        if (cur_e < from) {
+            is_out = true;
+        }
+        else if (cur_e >= to) {
+            cur_s = from;
+            cur_e = to;
+        }
+        else {
+            cur_s = from;
+        }
+    }
+    if (!is_out)
+        ans2 += cur_e - cur_s + 1;
+    cout << max(ans, ans2) << endl;
+}
