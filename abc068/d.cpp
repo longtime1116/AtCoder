@@ -41,6 +41,7 @@ int main() {
 
 
     lli n = 7;
+    // 8 のときがおかしい
     cout << n << endl;
     lli p = k / n;
     lli q = k % n;
