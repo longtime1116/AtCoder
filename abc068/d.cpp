@@ -40,16 +40,30 @@ int main() {
     cin1(k);
 
 
-    lli n = 7;
-    // 8 のときがおかしい
+    lli n = 50;
     cout << n << endl;
     lli p = k / n;
     lli q = k % n;
-    REP(i,0,q) {
-        cout << n+(n-1)*p << " ";
+    vlli ans;
+    // 初期値セット
+    REP(i,0,n) {
+        ans.push_back(i);
     }
-    REP(i,0,n-q) {
-        cout << n+(n-1)*(p-1) << " ";
+    // n 回の処理ですべてに1がたされるので、それをやる
+    REP(i,0,n) {
+        ans[i] +=p;
+    }
+    // 端数処理
+    REP(i,0,q) {
+        REP(j,0,n) {
+            if (j == i)
+                ans[j] += n;
+            else
+                ans[j] -= 1;
+        }
+    }
+    REP(i,0,n) {
+    cout << ans[i] << ( i == n-1 ? "" : " ");
     }
     cout << endl;
 }
