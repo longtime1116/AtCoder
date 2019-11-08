@@ -35,49 +35,29 @@ typedef pair<lli, lli> P;
 typedef tuple<lli, lli, lli> tup;
 typedef vector<lli> vlli;
 
+
+
+// 考察
+//
+// a1 a2 ... ai ...  aj ... an-1 an
+//
+// 初手で終わらせる場合の解は、
+//  max(|an-1 - an|, |an-1 - w|)
+// x が aiを取ったとし、その後 y が aj を取ったとする
+// x の次の一手は、n-1/n 以外を取った場合は↑に戻る。n-1/nを取った時は、
+// max(|an-1 - an|, |an-1 - aj|)
+// ここで、|an-1 - aj| が |an-1 - w| より大きくなるような aj を y がとるはずがない
+// よって、x が ai を取った場合のスコアは高々 |an-1 - an| となる。
+// なので、初手で終わらせる方が w によっては特になる場合は初手で終わらせるべきだし、そうでない場合も結局は初手で終わらせた場合と同じ結果になる
 int main() {
     lli n,z,w;
     cin3(n,z,w);
-    lli a[n];
+    lli a[n+1];
     ncin1(n,a);
 
-    lli b[n];
-    lli cur = 0;
-    REPE_R(i,n-1,0) {
-        cur = max(cur, a[i]);
-        b[i] = cur;
-    }
-    //REP(i,0,n) { cout2(i, b[i]); }
-
-    vlli c;
-    c.push_back(b[0]);
-    cur = b[0];
-    REP(i,1,n) {
-        if (cur == b[i])
-            continue;
-        cur = b[i];
-        c.push_back(cur);
-    }
-    //REP(i,0,c.size()) { cout2(i,c[i]); }
-
-    vlli d;
-    REP(i,0,c.size()-1) {
-        d.push_back(c[i]-c[i+1]);
-    }
-    //REP(i,0,d.size()) { cout2(i,d[i]); }
-
-
+    if (n == 1)
+        cout << abs(a[0] - w) << endl;
+    else
+        cout << max(abs(a[n-2] - a[n-1]), abs(a[n-1] - w)) << endl;
 
 }
-// 7 100 100 10 3000 100 2000 10 100 30
-// とする。Xがその時点で持っているものをx、Yはyとする
-// まず、右から走査して
-// 3000 3000 2000 2000 100 100 30
-// 圧縮して
-// 3000 2000 100 30
-// 差の配列
-// 1000 1900 70 30-y
-//
-// 先行は、左から走査して一番でかいものをとる。
-//
-// これは違いそう。1900を取ってもどうせその後上書きされたら意味がない。結局のところ最後のあたりの勝負になるのではないか？
