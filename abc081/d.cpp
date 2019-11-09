@@ -38,6 +38,49 @@ typedef vector<lli> vlli;
 int main() {
     lli n;
     cin1(n);
+    lli a[n];
+    lli max_val = -LLONG_MAX;
+    lli min_val = LLONG_MAX;
+    lli max_i, min_i;
+    REP(i,0,n) {
+        cin >> a[i];
+        if (max_val < a[i]) {
+            max_val = max(max_val, a[i]);
+            max_i = i;
+        }
+        if (min_val > a[i]) {
+            min_val = min(min_val, a[i]);
+            min_i = i;
+        }
+    }
+    vector<P> ans;
+    if (abs(max_val) > abs(min_val)) {
+        // 正に変えていく
+        REP(i,0,n) {
+            a[i] += max_val;
+            ans.push_back(P(max_i+1, i+1));
+        }
+        // 左から順に、足しこんでいく
+        REP(i,1,n) {
+            a[i] += a[i-1];
+            ans.push_back(P(i, i+1));
+        }
+    }
+    else {
+        REP(i,0,n) {
+            a[i] += min_val;
+            ans.push_back(P(min_i+1, i+1));
+        }
+        // 右から順に、足しこんでいく
+        REPE_R(i,n-2,0) {
+            a[i] += a[i+1];
+            ans.push_back(P(i+2, i+1));
+        }
+    }
+    cout << ans.size() << endl;
+    REP(i,0,ans.size()) {
+        cout << ans[i].first << " " << ans[i].second << endl;
+    }
 }
 
 
