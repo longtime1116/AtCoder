@@ -30,14 +30,38 @@ using namespace std;
 
 #define ARRAY_LENGTH(array) (sizeof(array) / sizeof(array[0]))
 
-typedef pair<unsigned long long int, unsigned long long int> P;
-typedef tuple<unsigned long long int, unsigned long long int, unsigned long long int> tup;
-typedef vector<unsigned long long int> vlli;
+typedef long long int lli;
+typedef pair<lli, lli> P;
+typedef tuple<lli, lli, lli> tup;
+typedef vector<lli> vlli;
 
 
-unsigned long long int mod = 1000000007;
-unsigned long long int mul(unsigned long long int x, unsigned long long int y) {
-    return (x * y) % mod;
+const lli MOD = 1000000007;
+const lli MAX = 1000001;
+lli fac[MAX];       // fac[i]     := iの階乗 % MOD
+lli fac_inv[MAX];   // fac_inv[i] := iの階乗の逆元 % MOD (すなわち、fac[i]*fac_inv[i] % MOD == 1)
+lli inv[MAX];       // inv[i]     := iの逆元 (すなわち、i*inv[i] % mod == 1)
+
+void init_comb_base() {
+    fac[0] = fac[1] = 1;
+    fac_inv[0] = fac_inv[1] = 1;
+    inv[1] = 1;
+    REP(i,2,MAX) {
+        fac[i] = i * fac[i-1] % MOD; // n! = n * (n-1)! % MOD
+        inv[i] = MOD - inv[MOD % i] * (MOD / i) % MOD; // ↑の解説参照
+        fac_inv[i] = inv[i] * fac_inv[i-1] % MOD; // n! = n * (n-1)! % MOD
+    }
+}
+
+lli comb(lli n, lli k) {
+    if (n<k)
+        return 0;
+    if (n < 0 || k < 0)
+        return 0;
+
+    // nCk = n! / (k! * (n-k)!)
+    //     ≡ n! * (k!)^-1 * ((n-k)!)^-1 (mod p)
+    return fac[n] * (fac_inv[k] * fac_inv[n-k] % MOD) % MOD;
 }
 
 int main() {
@@ -45,40 +69,23 @@ int main() {
     cin2(x,y);
     // x <= y とする
     if (x > y) {
-        unsigned long long int tmp = x;
-        x = y;
-        y = tmp;
+        swap(x,y);
     }
-    unsigned long long int set_count = x / 3;
-    unsigned long long int x_rest = x - set_count * 3;
-    unsigned long long int y_rest = y - set_count * 3;
-    if (x_rest * 2 != y_rest) {
+    if ((x + y) % 3 != 0) {
         cout << 0 << endl;
         return 0;
     }
-    //cout << "hoge" << endl;
-    // set_count 分の可能性にかける
-    unsigned long long int ans = x_rest + 1;
 
-    cout1(ans);
-
-    unsigned long long int left;
-    unsigned long long int right;
-    unsigned long long int hoge = 1;
-    REPE(i,1,set_count) {
-        left = i*2;
-        right = i;
-
-        //hoge = mul(hoge, left);
-        //hoge = mul(hoge, left-1);
-        //hoge /= right;
-        //hoge /= right;
-        hoge /= right;
-        hoge = mul(hoge, 2);
-        hoge = mul(hoge, left-1);
-
-        cout1(hoge);
+    lli count = (x+y) / 3;
+    // n: 1の方の回数、m: 2の方の回数
+    lli n = count*2-x;
+    lli m = count-n;
+    if (n+m*2 != x || n*2+m != y) {
+        cout << 0 << endl;
+        return 0;
     }
-    cout << mul(hoge, ans) << endl;
 
+    // n+mCnを出す
+    init_comb_base();
+    cout << comb(n+m, n) << endl;
 }
