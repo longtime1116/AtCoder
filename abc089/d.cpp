@@ -36,10 +36,12 @@ typedef tuple<lli, lli, lli> tup;
 typedef vector<lli> vlli;
 
 P table[90001];
+lli costs[90001];
 int main() {
     lli h,w,d;
     cin3(h,w,d);
-    lli a[h][w];
+    //cout3(h,w,d);
+    lli a[h+1][w+1];
     REPE(i,1,h) {
         REPE(j,1,w) {
             cin >> a[i][j];
@@ -53,9 +55,43 @@ int main() {
     ncin2(q, l, r);
 
 
-    REPE(i,1,h*w) {
-        REPE(j,i+1,h*w) {
-            // i => j のコスト
-        }
+    //REPE(i,1,d) {
+    //    lli total = 0;
+    //    for(lli j = i; j <= h*w; j += d) {
+    //        lli cur = 
+    //        // i => j のコストを保存する
+    //        cost[j] = 100;
+    //    }
+    //}
+    REPE(from,1,h*w) {
+        lli to = from + d;
+        if (to > h*w)
+            break;
+        // from => to を計算
+        P f = table[from];
+        P t = table[to];
+        lli cur_cost = abs(f.first - t.first) + abs(f.second - t.second);
+        costs[to] = costs[from] + cur_cost;
+    }
+    //REP(i,1,h*w) {
+    //    cout2(i,costs[i]);
+    //}
+
+    REP(i,0,q) {
+        cout << costs[r[i]] - costs[l[i]] << endl;
     }
 }
+
+
+// 1 => 4 => 7 => 10
+// 1 => 4: 8
+// 1 => 7: 15
+// 1 => 10: 30
+//
+//
+//
+//13  25  7 15 17
+//16  22 20  2  9
+//14  11 12  1 19
+//10   6 23  8 18
+// 3  21  5 24  4
