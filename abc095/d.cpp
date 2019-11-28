@@ -41,9 +41,12 @@ typedef tuple<lli, lli, lli> tup;
 typedef vector<lli> vlli;
 
 int main() {
+    cin.tie(0);
+    ios::sync_with_stdio(false);
+
     lli n,c;
     cin2(n,c);
-    lli x[n+2]; // 1 〜 n
+    lli x[n+2];
     lli v[n+1];
     ncin2_1(n,x,v);
     x[0] = 0;
@@ -51,44 +54,51 @@ int main() {
 
     lli cal_r[n+1];
     lli cal_l[n+2];
-    cal_r[0] = cal_l[n+1] = 0;
+    cal_r[0] = 0;
+    cal_l[n+1] = 0;
 
     lli ans = -LLONG_MAX;
-    // 左回り
+    // 右に行く
     REP(i,0,n) {
         // i から i + 1 に行く
         cal_r[i+1] = cal_r[i] + v[i+1] - (x[i+1]-x[i]);
         ans = max(ans, cal_r[i+1]);
-        cout2(i+1, cal_r[i+1]);
+        //cout2(i+1, cal_r[i+1]);
     }
-    // 右回り
+    // 左に行く
     REPE_R(i,n+1,2) {
         // i から i - 1 に行く
         cal_l[i-1] = cal_l[i] + v[i-1] - (x[i]-x[i-1]);
         ans = max(ans, cal_l[i-1]);
-        cout2(i-1, cal_l[i-1]);
+        //cout2(i-1, cal_l[i-1]);
     }
     //cout1(ans);
-
-    REP(i,1,n) {
-        REPE_R(j,n,i+1) {
-            // i まで左回りし、jまで右回りする
-            ans = max(ans, cal_l[i] - x[i] + cal_r[j]);
-            cout3(i,j,ans);
-        }
-    }
-    cout << "hoge" << endl;
-    REPE_R(i,n,1) {
-        REPE(j,1,i-1) {
-            // i まで右回りし、jまで左回りする
-            ans = max(ans, cal_r[i] - (c-x[i]) + cal_l[j]);
-            cout3(i,j,ans);
-        }
+    // まず左に行き、その後戻って右に行く
+    lli max_go2 = 0;
+    REPE(i,2,n) {
+        // 左に行き i まで行く
+        lli cost_go = cal_l[i];
+        // i から 0 に戻る
+        lli cost_back = c - x[i];
+        // 0 から i-1 までの最もいい感じのところに行く
+        max_go2 = max(max_go2, cal_r[i-1]);
+        ans = max(ans, cost_go - cost_back + max_go2);
     }
 
+
+    // まず右に行き、その後戻って左に行く
+    max_go2 = 0;
+    REPE_R(i,n-1,1) {
+        // 右に行き i まで行く
+        lli cost_go = cal_r[i];
+        // i から 0 に戻る
+        lli cost_back = x[i];
+        // 0 から i+1 までの最もいい感じのところに行く
+        max_go2 = max(max_go2, cal_l[i+1]);
+        ans = max(ans, cost_go - cost_back + max_go2);
+    }
     if (ans < 0)
         cout << 0 << endl;
-    else {
+    else
         cout << ans << endl;
-    }
 }
