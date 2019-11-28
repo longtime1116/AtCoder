@@ -59,13 +59,33 @@ int main() {
         // i から i + 1 に行く
         cal_r[i+1] = cal_r[i] + v[i+1] - (x[i+1]-x[i]);
         ans = max(ans, cal_r[i+1]);
+        cout2(i+1, cal_r[i+1]);
     }
     // 右回り
     REPE_R(i,n+1,2) {
         // i から i - 1 に行く
         cal_l[i-1] = cal_l[i] + v[i-1] - (x[i]-x[i-1]);
         ans = max(ans, cal_l[i-1]);
+        cout2(i-1, cal_l[i-1]);
     }
+    //cout1(ans);
+
+    REP(i,1,n) {
+        REPE_R(j,n,i+1) {
+            // i まで左回りし、jまで右回りする
+            ans = max(ans, cal_l[i] - x[i] + cal_r[j]);
+            cout3(i,j,ans);
+        }
+    }
+    cout << "hoge" << endl;
+    REPE_R(i,n,1) {
+        REPE(j,1,i-1) {
+            // i まで右回りし、jまで左回りする
+            ans = max(ans, cal_r[i] - (c-x[i]) + cal_l[j]);
+            cout3(i,j,ans);
+        }
+    }
+
     if (ans < 0)
         cout << 0 << endl;
     else {
