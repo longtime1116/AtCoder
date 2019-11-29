@@ -70,14 +70,11 @@ int main() {
     sieve(100000);
 
 
-    // 例えば必ず 3 の倍数になるには、mod が x なものをいれておけばいい、みたいな感じかと思った
     vlli ans;
-    ans.push_back(2);
-    ans.push_back(3);
 
-    lli count = n - 2;
+    lli count = n;
     REP(i,0,100000) {
-        if (prime[i] % 3 == 1) {
+        if (prime[i] % 5 == 1) {
             ans.push_back(prime[i]);
             count++;
         }
