@@ -40,29 +40,38 @@ typedef pair<lli, lli> P;
 typedef tuple<lli, lli, lli> tup;
 typedef vector<lli> vlli;
 
-lli factorial[200001];
-void calc_factorial() {
-    REP(i,1,200001) {
-        factorial[i] = factorial[i-1] + i;
-    }
-}
-
 int main() {
     lli n;
     cin1(n);
     lli a[n];
     ncin1(n,a);
 
-    //calc_factorial();
-    lli cur_xor = 0;
-    lli cur_sum = 0;
-    lli ans = 0;
     lli l = 0;
-    lli r = 0;
-    for (r = 0; r < n; r++) {
-        //
+    lli r = 1;
+    lli cur_xor = a[0];
+    lli cur_sum = a[0];
+    lli ans = 0;
+    // l に対してどこまで r が対応できるかを見ていく
+    for (l = 0; l < n; l++) {
+        while (true) {
+            if (r != n && (cur_xor^a[r]) == cur_sum + a[r]) {
+                cur_xor ^= a[r];
+                cur_sum += a[r];
+                r++;
+            }
+            else {
+                // l から r-1 までを加算
+                ans += r - l;
+                //cout3(l,r, r - l);
+                break;
+            }
+        }
 
+        // 今の l を消す
+        cur_xor ^= a[l];
+        cur_sum -= a[l];
     }
+    cout << ans << endl;
 }
 
 
