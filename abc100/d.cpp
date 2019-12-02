@@ -42,6 +42,29 @@ typedef vector<lli> vlli;
 
 
 
+// m=3として、
+// m1, m2, m3 が選ばれたとする
+//
+//      Xm1 Ym1 Zm1
+//      Xm2 Ym2 Zm2
+//      Xm3 Ym3 Zm3
+//
+// このときの求めるべき値は、
+//
+//      abs(Xm1 + Xm2 + Xm3) + abs(Ym1 + Ym2 + Ym3) + abs(Zm1 + Zm2 + Zm3)
+//
+// 例えば Y のところが負でほかは正だとすると、
+//
+//      (Xm1 + Xm2 + Xm3) - (Ym1 + Ym2 + Ym3) + (Zm1 + Zm2 + Zm3)
+//
+// 式変形して
+//
+//      (Xm1 - Ym1 + Zm1) + (Xm2 - Ym2 + Zm2) + (Xm3 - Ym3 + Zm3)
+//
+// これの最大値を出したいのであれば、Xmi + Ymi + Zmi の合計値が大きい順に m 個取れば良い
+//
+// あとはこれを 8 通りやって最大のものを選べば良い
+//
 
 int main() {
     lli n,m;
