@@ -50,17 +50,15 @@ int main() {
     // FIXME: m は 10^9 以下の制約なので、これだとメモリ確保しすぎになる。
     // vec.push_back(make_pair(0, [1,3,4])) みたいな感じにすれば、たかだかn個になる。
     map<lli, vlli> loc;
-    vlli v = {0};
-    loc[a[0]] = v;
     loc[a[0]].push_back(0);
     REP(i,1,n) {
         a[i] = (a[i-1] + a[i]) % m;
-        vlli v;
-        if (loc[a[i]].size() == 0) {
-            loc[a[i]] = v;
-        }
+        //cout2(a[i], i);
         loc[a[i]].push_back(i);
     }
+    //REP(i,0,n) {
+    //    cout2(i,loc[i].size());
+    //}
     lli cur = 0;
     lli ans = 0;
     REP(i,0,n) {
@@ -70,12 +68,10 @@ int main() {
         if (it == loc[cur].end())
             continue;
         ans += loc[cur].size() - ((it - loc[cur].begin()));
-        cout3(i, cur,loc[cur].size() - ((it - loc[cur].begin())-1));
+        cout3(i, cur,loc[cur].size() - ((it - loc[cur].begin())));
         cout1(it - loc[cur].begin());
-        cout1(loc[cur].size());
 
-        lli x = (m + cur - a[i]) % m;
-        cur = m-x;
+        cur = (cur + a[i]) % m;
     }
     cout << ans << endl;
 
