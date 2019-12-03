@@ -35,6 +35,8 @@ typedef pair<lli, lli> P;
 typedef tuple<lli, lli, lli> tup;
 typedef vector<lli> vlli;
 
+
+// これはabc105のd問題ではないが、なぜか存在している。これはなんの問題なのだろうか？
 int main() {
     lli h,w;
     cin2(h,w);
